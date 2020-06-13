@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+  xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="cordova-plugin-salesforce-dmp"
+  version="0.0.1">
+
+  <name>DMP</name>
+  <description>Cordova Salesforce DMP Plugin</description>
+  <license>MIT</license>
+  <keywords>cordova,salesforce,dmp</keywords>
+  <repo>https://github.com/okode/cordova-plugin-salesforce-dmp</repo>
+  <issue>https://github.com/okode/cordova-plugin-salesforce-dmp/issues</issue>
+
+  <js-module src="www/dmp.js" name="dmp">
+    <clobbers target="window.DMP" />
+  </js-module>
+
+  <!-- Android -->
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="DMP">
+        <param name="android-package" value="com.okode.dmp.DMPPlugin"/>
+      </feature>
+    </config-file>
+    <edit-config file="AndroidManifest.xml" target="/manifest" mode="merge">
+      <uses-permission android:name="android.permission.INTERNET"/>
+      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+      <service android:name="com.krux.androidsdk.aggregator.EventPublisherService" android:enabled="true" />
+      <service android:name="com.krux.androidsdk.aggregator.ConsentService" android:enabled="true" />
+    </edit-config>
+    <framework src="src/android/build.gradle" custom="true" type="gradleReference"/>
+    <source-file src="src/android/DMPPlugin.java" target-dir="src/com/okode/dmp" />
+    <resource-file src="src/android/krux-4.4.0.aar" target="libs/krux-4.4.0.aar" />
+  </platform>
+
+  <!-- iOS -->
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="DMP">
+        <param name="ios-package" value="CDVDMP" />
+      </feature>
+    </config-file>
+    <header-file src="src/ios/CDVDMP.h" />
+    <source-file src="src/ios/CDVDMP.m" />
+    <header-file src="src/ios/KruxConsentCallbackImpl.h"/>
+    <source-file src="src/ios/KruxConsentCallbackImpl.m"/>
+    <framework src="SystemConfiguration.framework"/>
+    <framework src="AdSupport.framework"/>
+    <framework src="CoreLocation.framework"/>
+    <framework src="src/ios/iOSKruxLibUniversal.framework" custom="true"/>
+  </platform>
+
+</plugin>
