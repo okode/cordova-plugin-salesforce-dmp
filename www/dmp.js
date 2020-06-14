@@ -1,53 +1,32 @@
 var cordova = require('cordova');
 var DMP = function () { };
 
-// TODO - Plugin Errors
-// DMP.prototype.DMP__REQUEST__ACCOUNTS_NOT_FOUND = -100
+function exec (action, params) {
+  return new Promise(function (resolve, reject) {
+    cordova.exec(
+      function (success) { resolve(success); },
+      function (error) { reject(error); },
+      'DMP',
+      action,
+      params ? [params] : undefined
+    );
+  });
+}
 
 DMP.prototype.initialize = function (params) {
-  return new Promise(function (resolve, reject) {
-    cordova.exec(
-      function (success) { resolve(success); },
-      function (error) { reject(error); },
-      'DMP',
-      'initialize',
-      [params]
-    );
-  });
+  return exec('initialize', params);
 };
-DMP.prototype.sendRequests = function (params) {
-  return new Promise(function (resolve, reject) {
-    cordova.exec(
-      function (success) { resolve(success); },
-      function (error) { reject(error); },
-      'DMP',
-      'sendRequests',
-      [params]
-    );
-  });
+
+DMP.prototype.sendRequests = function () {
+  return exec('sendRequests');
 };
+
 DMP.prototype.trackPage = function (params) {
-  return new Promise(function (resolve, reject) {
-    cordova.exec(
-      function (success) { resolve(success); },
-      function (error) { reject(error); },
-      'DMP',
-      'trackPage',
-      [params]
-    );
-  });
+  return exec('trackPage', params);
 };
 
 DMP.prototype.fireEvent = function (params) {
-  return new Promise(function (resolve, reject) {
-    cordova.exec(
-      function (success) { resolve(success); },
-      function (error) { reject(error); },
-      'DMP',
-      'fireEvent',
-      [params]
-    );
-  });
+  return exec('fireEvent', params);
 };
 
 module.exports = new DMP();
