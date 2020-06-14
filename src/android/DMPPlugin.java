@@ -97,14 +97,14 @@ public class DMPPlugin extends CordovaPlugin {
     public Bundle getEventAttributes(JSONArray args) throws JSONException {
         JSONObject argsObject = args.getJSONObject(0);
         Bundle eventAttributes = new Bundle();
-        eventAttributes.putString("action", (String) argsObject.get("eventAction"));
-        eventAttributes.putString("category", (String) argsObject.get("eventCategory"));
-        eventAttributes.putString("label", (String) argsObject.get("eventLabel"));
+        eventAttributes.putString("action", (String) argsObject.get("action"));
+        eventAttributes.putString("category", (String) argsObject.get("category"));
+        eventAttributes.putString("label", (String) argsObject.get("label"));
         return eventAttributes;
     }
 
     private void addPolicyRegimeParameter(Bundle attributes) {
-        attributes.putString("pr","gdpr");
+        attributes.putString("pr", "gdpr");
     }
 
     private Bundle getIdParameters(){

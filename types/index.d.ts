@@ -1,9 +1,4 @@
 export interface DMPPlugin {
-
-
-// TODO - Plugin Errors
-// readonly DMP__REQUEST__ACCOUNTS_NOT_FOUND;
-
   /**
    * @description      Initialize Dmp analytics.
    *                   On Android, if several are found, it will open a modal for user selection.
@@ -12,7 +7,7 @@ export interface DMPPlugin {
    * @errors
    *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
    */
-  initialize(params): Promise <string> ;
+  initialize(params: { apiKey: string }): Promise<string>;
 
   /**
    * @description      Send Requests Dmp analytics.
@@ -22,7 +17,8 @@ export interface DMPPlugin {
    * @errors
    *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
    */
-  sendRequests(params): Promise <string> ;
+  sendRequests(): Promise<string>;
+
   /**
    * @description      track page view.
    *                   On Android, if several are found, it will open a modal for user selection.
@@ -31,7 +27,7 @@ export interface DMPPlugin {
    * @errors
    *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
    */
-  trackPage(params): Promise <string> ;
+  trackPage(params: { email: string, logged: boolean, path: string, pageType: string }): Promise<string>;
 
   /**
    * @description      Track event.
@@ -41,7 +37,5 @@ export interface DMPPlugin {
    * @errors
    *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
    */
-  fireEvent(params): Promise <string> ;
-
+  fireEvent(params: { action: string, category: string, label: string }): Promise<string>;
 }
-

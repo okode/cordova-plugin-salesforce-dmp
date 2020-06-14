@@ -66,7 +66,7 @@ static KruxTracker *kt;
 - (void)fireEvent:(CDVInvokedUrlCommand *)command
 {
     // NSString* a = [[command arguments] objectAtIndex:0];
-    NSDictionary *attrs = [[NSDictionary alloc] initWithObjectsAndKeys: @"click", @"eventAction", @"button", @"eventCategory", @"Connect to dmp", @"eventLabel", nil];
+    NSDictionary *attrs = [[NSDictionary alloc] initWithObjectsAndKeys: @"click", @"action", @"button", @"category", @"Connect to dmp", @"label", nil];
     NSError *err;
     [kt fireEvent:@"HsdfRt12" eventAttributes:attrs withError:&err];
     
