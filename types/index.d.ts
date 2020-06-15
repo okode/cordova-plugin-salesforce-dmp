@@ -17,7 +17,17 @@ export interface DMPPlugin {
    * @errors
    *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
    */
-  sendRequests(params: any): Promise<string>;
+  sendRequests(params: { identity: any, consent: any, policyRegime: string}): Promise<string>;
+
+  /**
+   * @description      Get Dmp segments.
+   *                   On Android, if several are found, it will open a modal for user selection.
+   * @returns
+   *                   text: if succesfully retrieved.
+   * @errors
+   *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
+   */
+  getSegments(): Promise<string>;
 
   /**
    * @description      track page view.

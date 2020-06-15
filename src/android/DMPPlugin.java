@@ -13,7 +13,11 @@ import com.krux.androidsdk.aggregator.KruxConsentCallback;
 import com.krux.androidsdk.aggregator.KruxEventAggregator;
 import com.krux.androidsdk.aggregator.KruxSegments;
 
+import java.util.Iterator;
+
 public class DMPPlugin extends CordovaPlugin {
+
+    String mSegments = "";
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
@@ -22,42 +26,47 @@ public class DMPPlugin extends CordovaPlugin {
                 @Override
                 public void getSegments(final String segments) {
                     Log.d("KRUX", "Krux formatted segments: " + segments);
+                    mSegments = segments;
                 }
             };
             KruxConsentCallback consentCallback = new KruxConsentCallbackImpl();
             JSONObject argsObject = args.getJSONObject(0);
             String apiKey = (String) argsObject.get("apiKey");
             KruxEventAggregator.initialize(this.cordova.getContext(), apiKey, kruxSegmentsCallback, true, consentCallback);
-            // TODO
-            // this.cordova.getActivity().runOnUiThread(() -> callbackContext.success("Test OK"));
+
             Log.d("KRUX", "Initialize OK: " + apiKey);
             callbackContext.success("Initialize OK " + apiKey);
             return true;
         }
 
         if ("sendRequests".equals(action)) {
-            Bundle consentSetAttributes = getConsentAttributes();
-            Bundle consentGetAttributes = getIdParameters();
-            Bundle idAttributes = getIdParameters();
-            addPolicyRegimeParameter(consentGetAttributes);
-            addPolicyRegimeParameter(consentSetAttributes);
+            JSONObject argsObject = args.getJSONObject(0);
+            Bundle consentSetAttributes = getConsentAttributes(argsObject);
+            Bundle consentGetAttributes = getIdParameters(argsObject);
+            Bundle idAttributes = getIdParameters(argsObject);
+            addPolicyRegimeParameter(consentGetAttributes, argsObject);
+            addPolicyRegimeParameter(consentSetAttributes, argsObject);
 
             KruxEventAggregator.consentGetRequest(consentGetAttributes);
             KruxEventAggregator.consentSetRequest(consentSetAttributes);
             KruxEventAggregator.consumerRemoveRequest(idAttributes);
             KruxEventAggregator.consumerPortabilityRequest(idAttributes);
-            // TODO
-            // this.cordova.getActivity().runOnUiThread(() -> callbackContext.success("Test OK"));
+
             Log.d("KRUX", "Send requests OK");
             callbackContext.success("Send requests OK");
+            return true;
+        }
+
+        if ("getSegments".equals(action)) {
+            Log.d("KRUX", "Gettting segments: " + mSegments);
+            callbackContext.success(mSegments);
             return true;
         }
 
         if ("trackPage".equals(action)) {
             Bundle pageAttrs = getPageAttributes(args);
             KruxEventAggregator.trackPageView("Main", pageAttrs, getUserAttributes(args));
-            // TODO
-            // this.cordova.getActivity().runOnUiThread(() -> callbackContext.success("Test OK"));
+
             Log.d("KRUX", "Page View OK: " + pageAttrs.getString("path"));
             callbackContext.success("Tracking page view OK " + pageAttrs.getString("path"));
             return true;
@@ -66,8 +75,7 @@ public class DMPPlugin extends CordovaPlugin {
         if ("fireEvent".equals(action)) {
             Bundle eventAttrs = getEventAttributes(args);
             KruxEventAggregator.fireEvent("Main", eventAttrs);
-            // TODO
-            //this.cordova.getActivity().runOnUiThread(() -> callbackContext.success("Test OK"));
+
             Log.d("KRUX", "Fire Event OK: " + eventAttrs.getString("action"));
             callbackContext.success("Tracking fire event OK " + eventAttrs.getString("action"));
             return true;
@@ -103,26 +111,39 @@ public class DMPPlugin extends CordovaPlugin {
         return eventAttributes;
     }
 
-    private void addPolicyRegimeParameter(Bundle attributes) {
-        attributes.putString("pr", "gdpr");
+    private void addPolicyRegimeParameter(Bundle attributes, JSONObject argsObject) throws JSONException {
+        attributes.putString("pr", (String) argsObject.get("policyRegime"));
     }
 
-    private Bundle getIdParameters(){
+    private Bundle getIdParameters(JSONObject argsObject) throws JSONException {
         Bundle attributeBundle = new Bundle();
-        attributeBundle.putString("idv","00000000T");
-        attributeBundle.putString("dt","aaid");
-        attributeBundle.putString("idt","device");
+        JSONObject identityObj = (JSONObject) argsObject.get("identity");
+        Iterator<String> keys = identityObj.keys();
+
+        while(keys.hasNext()) {
+            String key = keys.next();
+            if (identityObj.get(key) instanceof String) {
+                attributeBundle.putString(key, (String) identityObj.get(key));
+            } else {
+                Log.e("Mapping Error", "El atributo " + key + " no es de tipo String");
+            }
+        }
         return attributeBundle;
     }
 
-    private Bundle getConsentAttributes() {
+    private Bundle getConsentAttributes(JSONObject argsObject) throws JSONException {
         Bundle attributeBundle = new Bundle();
-        attributeBundle.putInt("dc", 1);
-        attributeBundle.putInt("cd", 1);
-        attributeBundle.putInt("tg", 1);
-        attributeBundle.putInt("al", 1);
-        attributeBundle.putInt("sh", 0);
-        attributeBundle.putInt("re", 0);
+        JSONObject identityObj = (JSONObject) argsObject.get("consent");
+        Iterator<String> keys = identityObj.keys();
+
+        while(keys.hasNext()) {
+            String key = keys.next();
+            if (identityObj.get(key) instanceof Integer) {
+                attributeBundle.putInt(key, (Integer) identityObj.get(key));
+            } else {
+                Log.e("Mapping Error", "El atributo " + key + " no es de tipo numérico entero");
+            }
+        }
         return attributeBundle;
     }
 
