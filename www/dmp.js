@@ -8,7 +8,7 @@ function exec (action, params) {
       function (error) { reject(error); },
       'DMP',
       action,
-      params ? [params] : undefined
+      [params]
     );
   });
 }
@@ -17,8 +17,8 @@ DMP.prototype.initialize = function (params) {
   return exec('initialize', params);
 };
 
-DMP.prototype.sendRequests = function () {
-  return exec('sendRequests');
+DMP.prototype.sendRequests = function (params) {
+  return exec('sendRequests', params);
 };
 
 DMP.prototype.trackPage = function (params) {

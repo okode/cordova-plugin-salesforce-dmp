@@ -17,7 +17,7 @@ export interface DMPPlugin {
    * @errors
    *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
    */
-  sendRequests(): Promise<string>;
+  sendRequests(params: any): Promise<string>;
 
   /**
    * @description      track page view.
