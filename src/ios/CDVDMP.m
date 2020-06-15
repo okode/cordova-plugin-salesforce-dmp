@@ -1,4 +1,3 @@
-
 #import <Foundation/Foundation.h>
 #import "CDVDMP.h"
 #import "KruxConsentCallbackImpl.h"
@@ -13,9 +12,10 @@ static KruxTracker *kt;
 
 - (void)initialize:(CDVInvokedUrlCommand*)command
 {
-    // TODO - Take id from app data: NSString* a = [[command arguments] objectAtIndex:0];
+    NSDictionary* options = [command argumentAtIndex:0];
+    NSString* apikey = [options objectForKey:@"apikey"];
     KruxConsentCallbackImpl *consentCallback = [[KruxConsentCallbackImpl alloc] init];
-    kt = [KruxTracker sharedEventTrackerWithConfigId:@"uwgimqbe0" debugFlag:true dryRunFlag:false consentCallback:consentCallback];
+    kt = [KruxTracker sharedEventTrackerWithConfigId:apikey debugFlag:true dryRunFlag:false consentCallback:consentCallback];
     
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
@@ -26,12 +26,14 @@ static KruxTracker *kt;
 
 - (void)sendRequests:(CDVInvokedUrlCommand*)command
 {
-    // TODO
-    NSDictionary *consentSetAttributes = [self getConsentAttributes];
-    NSDictionary *idAttributes = [self getIdParameters];
-    NSDictionary *consentGetAttributes = [self getIdParameters];
-    [self addPolicyRegimeParameter:consentGetAttributes];
-    [self addPolicyRegimeParameter:consentSetAttributes];
+    NSDictionary* options = [command argumentAtIndex:0];
+    NSString* pr = [options objectForKey:@"policyRegime"];
+    NSDictionary *consentAttr = [options objectForKey:@"consent"];
+    NSMutableDictionary *consentSetAttributes = [consentAttr mutableCopy];
+    NSDictionary *idAttributes = [options objectForKey:@"identity"];
+    NSMutableDictionary *consentGetAttributes = [idAttributes mutableCopy];
+    [self addPolicyRegimeParameter:consentGetAttributes : pr];
+    [self addPolicyRegimeParameter:consentSetAttributes : pr];
     
     [kt consentGetRequest:consentGetAttributes];
     [kt consentSetRequest:consentSetAttributes];
@@ -45,15 +47,22 @@ static KruxTracker *kt;
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void)getSegments:(CDVInvokedUrlCommand*)command
+{
+    NSArray* segments = [kt getSegments];
+    
+    CDVPluginResult* result = [CDVPluginResult
+                               resultWithStatus:CDVCommandStatus_OK
+                               messageAsArray:segments];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
 - (void)trackPage:(CDVInvokedUrlCommand *)command
 {
-    // TODO - Take data from app: NSString* a = [[command arguments] objectAtIndex:0];
-    
-    // Create a dictionary of page attributes
-    NSDictionary *pageAttr = [[NSDictionary alloc] initWithObjectsAndKeys: @"/home", @"path", @"home", @"pageType", nil];
-    // Create a dictionary of user attributes
-    NSDictionary *userAttr = [[NSDictionary alloc] initWithObjectsAndKeys: @"prueba@okode.com", @"email", nil];
-    // Initialize Krux Tracker
+    NSDictionary* attrs = [command argumentAtIndex:0];
+    NSMutableDictionary *pageAttr = [self getPageParameters : attrs];
+    NSMutableDictionary *userAttr = [self getUserParameters : attrs];
     [kt trackPageView:@"Home_Page" pageAttributes:pageAttr userAttributes:userAttr];
     
     CDVPluginResult* result = [CDVPluginResult
@@ -65,10 +74,9 @@ static KruxTracker *kt;
 
 - (void)fireEvent:(CDVInvokedUrlCommand *)command
 {
-    // NSString* a = [[command arguments] objectAtIndex:0];
-    NSDictionary *attrs = [[NSDictionary alloc] initWithObjectsAndKeys: @"click", @"action", @"button", @"category", @"Connect to dmp", @"label", nil];
+    NSDictionary *eventAttr = [command argumentAtIndex:0];
     NSError *err;
-    [kt fireEvent:@"HsdfRt12" eventAttributes:attrs withError:&err];
+    [kt fireEvent:[eventAttr objectForKey:@"id"] eventAttributes:eventAttr withError:&err];
     
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
@@ -77,32 +85,27 @@ static KruxTracker *kt;
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void) addPolicyRegimeParameter: (NSDictionary *) attributes
+- (void) addPolicyRegimeParameter: (NSMutableDictionary *) attributes : (NSString *) pr
 {
-    [attributes setValue:@"gdpr" forKey:@"pr"];
+    [attributes setValue:pr forKey:@"pr"];
 }
 
-- (NSDictionary *) getIdParameters
+- (NSMutableDictionary *) getPageParameters: (NSDictionary *) attributes
 {
-    NSDictionary *consentAttributes = [[NSDictionary alloc] init];
-    [consentAttributes setValue:@"<idfa-value>" forKey:@"idv"];
-    [consentAttributes setValue:@"idfa" forKey:@"dt"];
-    [consentAttributes setValue:@"device" forKey:@"idt"];
+    NSMutableDictionary *pageAttributes = [[NSMutableDictionary alloc] init];
+    [pageAttributes setValue:[attributes objectForKey:@"path"] forKey:@"path"];
+    [pageAttributes setValue:[attributes objectForKey:@"type"] forKey:@"type"];
     
-    return consentAttributes;
+    return pageAttributes;
 }
 
-- (NSDictionary *) getConsentAttributes
+- (NSMutableDictionary *) getUserParameters: (NSDictionary *) attributes
 {
-    NSMutableDictionary *consentAttributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                              [NSNumber numberWithInt:1], @"dc",
-                                              [NSNumber numberWithInt:1], @"cd",
-                                              [NSNumber numberWithInt:1], @"tg",
-                                              [NSNumber numberWithInt:1], @"al",
-                                              [NSNumber numberWithInt:1], @"sh",
-                                              [NSNumber numberWithInt:1], @"re", nil];
-    [consentAttributes addEntriesFromDictionary:[self getIdParameters]];
-    return consentAttributes;
+    NSMutableDictionary *userAttributes = [[NSMutableDictionary alloc] init];
+    [userAttributes setValue:[attributes objectForKey:@"email"] forKey:@"email"];
+    [userAttributes setValue:[attributes objectForKey:@"logged"] forKey:@"logged"];
+    
+    return userAttributes;
 }
 
 @end

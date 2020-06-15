@@ -89,7 +89,7 @@ public class DMPPlugin extends CordovaPlugin {
     public Bundle getPageAttributes(JSONArray args) throws JSONException {
         JSONObject argsObject = args.getJSONObject(0);
         Bundle pageAttributes = new Bundle();
-        pageAttributes.putString("type", (String) argsObject.get("pageType"));
+        pageAttributes.putString("type", (String) argsObject.get("type"));
         pageAttributes.putString("path", (String) argsObject.get("path"));
         return pageAttributes;
     }
@@ -125,7 +125,7 @@ public class DMPPlugin extends CordovaPlugin {
             if (identityObj.get(key) instanceof String) {
                 attributeBundle.putString(key, (String) identityObj.get(key));
             } else {
-                Log.e("Mapping Error", "El atributo " + key + " no es de tipo String");
+                Log.e("Parsing Error", key + " attribute must be of type string");
             }
         }
         return attributeBundle;
@@ -141,7 +141,7 @@ public class DMPPlugin extends CordovaPlugin {
             if (identityObj.get(key) instanceof Integer) {
                 attributeBundle.putInt(key, (Integer) identityObj.get(key));
             } else {
-                Log.e("Mapping Error", "El atributo " + key + " no es de tipo numérico entero");
+                Log.e("Parsing Error", key + " attribute must be of type integer");
             }
         }
         return attributeBundle;

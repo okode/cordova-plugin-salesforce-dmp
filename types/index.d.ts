@@ -17,7 +17,7 @@ export interface DMPPlugin {
    * @errors
    *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
    */
-  sendRequests(params: { identity: any, consent: any, policyRegime: string}): Promise<string>;
+  sendRequests(params: { identity: { [index: string]: string; }, consent: { [index: string]: number; }, policyRegime: string}): Promise<string>;
 
   /**
    * @description      Get Dmp segments.
