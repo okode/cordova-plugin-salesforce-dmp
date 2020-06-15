@@ -21,6 +21,10 @@ DMP.prototype.sendRequests = function (params) {
   return exec('sendRequests', params);
 };
 
+DMP.prototype.getSegments = function (params) {
+  return exec('getSegments', params);
+};
+
 DMP.prototype.trackPage = function (params) {
   return exec('trackPage', params);
 };
