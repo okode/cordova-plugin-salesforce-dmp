@@ -31,6 +31,7 @@ static KruxTracker *kt;
     NSDictionary *consentAttr = [options objectForKey:@"consent"];
     NSMutableDictionary *consentSetAttributes = [consentAttr mutableCopy];
     NSDictionary *idAttributes = [options objectForKey:@"identity"];
+    if (idAttributes == nil) idAttributes = [[NSDictionary alloc] init];
     NSMutableDictionary *consentGetAttributes = [idAttributes mutableCopy];
     [self addPolicyRegimeParameter:consentGetAttributes : pr];
     [self addPolicyRegimeParameter:consentSetAttributes : pr];

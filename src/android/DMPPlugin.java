@@ -118,14 +118,16 @@ public class DMPPlugin extends CordovaPlugin {
     private Bundle getIdParameters(JSONObject argsObject) throws JSONException {
         Bundle attributeBundle = new Bundle();
         JSONObject identityObj = (JSONObject) argsObject.get("identity");
-        Iterator<String> keys = identityObj.keys();
 
-        while(keys.hasNext()) {
-            String key = keys.next();
-            if (identityObj.get(key) instanceof String) {
-                attributeBundle.putString(key, (String) identityObj.get(key));
-            } else {
-                Log.e("Parsing Error", key + " attribute must be of type string");
+        if (identityObj != null) {
+            Iterator<String> keys = identityObj.keys();
+            while(keys.hasNext()) {
+                String key = keys.next();
+                if (identityObj.get(key) instanceof String) {
+                    attributeBundle.putString(key, (String) identityObj.get(key));
+                } else {
+                    Log.e("Parsing Error", key + " attribute must be of type string");
+                }
             }
         }
         return attributeBundle;
