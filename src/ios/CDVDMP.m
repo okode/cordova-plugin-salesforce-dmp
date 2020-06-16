@@ -13,7 +13,7 @@ static KruxTracker *kt;
 - (void)initialize:(CDVInvokedUrlCommand*)command
 {
     NSDictionary* options = [command argumentAtIndex:0];
-    NSString* apikey = [options objectForKey:@"apikey"];
+    NSString* apikey = [options objectForKey:@"apiKey"];
     KruxConsentCallbackImpl *consentCallback = [[KruxConsentCallbackImpl alloc] init];
     kt = [KruxTracker sharedEventTrackerWithConfigId:apikey debugFlag:true dryRunFlag:false consentCallback:consentCallback];
     
