@@ -117,9 +117,8 @@ public class DMPPlugin extends CordovaPlugin {
 
     private Bundle getIdParameters(JSONObject argsObject) throws JSONException {
         Bundle attributeBundle = new Bundle();
-        JSONObject identityObj = (JSONObject) argsObject.get("identity");
-
-        if (identityObj != null) {
+        if (argsObject.has("identity")) {
+            JSONObject identityObj = (JSONObject) argsObject.get("identity");
             Iterator<String> keys = identityObj.keys();
             while(keys.hasNext()) {
                 String key = keys.next();
