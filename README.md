@@ -26,42 +26,34 @@ devDependencies: {
 }
 ```
 
+## Import
+
+```
+import { DMPPlugin } from 'cordova-plugin-salesforce-dmp';
+declare var DMP: DMPPlugin;
+```
+
 ## Usage
 
 ```
-window.dmp.save({ id, name, password });
+DMP.initialize({ apiKey: string })
 ```
 
 ```
-window.dmp.request();
+DMP.sendRequests(params: { policyRegime: string, consent: { [index: string]: number; }, identity?: { [index: string]: string; }})
 ```
 
 ```
-window.dmp.delete({ id });
+DMP.getSegments()
 ```
 
-## Operation codes
+```
+DMP.trackPage(params: { email: string, logged: boolean, path: string, type: string })
+```
 
-### Request
-
-- `DMP__REQUEST__ACCOUNTS_NOT_FOUND** = -100`
-- `DMP__REQUEST__DIALOG_CANCELLED = -101`
-
-### Save
-
-- `DMP__SAVE = -200`
-- `DMP__SAVE__BAD_REQUEST = -201`
-
-### Delete
-
-- `DMP__DELETE = -300`
-
-### Common
-
-- `DMP__COMMON__UNKOWN = -400`
-- `DMP__COMMON__CONCURRENT_NOT_ALLOWED = -401`
-- `DMP__COMMON__GOOGLE_API_UNAVAILABLE = -402`
-- `DMP__COMMON__RESOLUTION_PROMPT_FAIL = -403`
+```
+DMP.fireEvent(params: { action: string, category: string, label: string })
+```
 
 ## License
 
