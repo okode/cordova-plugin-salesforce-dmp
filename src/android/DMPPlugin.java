@@ -34,8 +34,8 @@ public class DMPPlugin extends CordovaPlugin {
             String apiKey = (String) argsObject.get("apiKey");
             KruxEventAggregator.initialize(this.cordova.getContext(), apiKey, kruxSegmentsCallback, true, consentCallback);
 
-            Log.d("KRUX", "Initialize OK: " + apiKey);
-            callbackContext.success("Initialize OK " + apiKey);
+            Log.d("KRUX", "Initializing Krux with key: " + apiKey);
+            callbackContext.success("Initializing Krux with key: " + apiKey);
             return true;
         }
 
@@ -52,8 +52,8 @@ public class DMPPlugin extends CordovaPlugin {
             KruxEventAggregator.consumerRemoveRequest(idAttributes);
             KruxEventAggregator.consumerPortabilityRequest(idAttributes);
 
-            Log.d("KRUX", "Send requests OK");
-            callbackContext.success("Send requests OK");
+            Log.d("KRUX", "Sending requests");
+            callbackContext.success("Sending requests");
             return true;
         }
 
@@ -67,8 +67,8 @@ public class DMPPlugin extends CordovaPlugin {
             Bundle pageAttrs = getPageAttributes(args);
             KruxEventAggregator.trackPageView("Main", pageAttrs, getUserAttributes(args));
 
-            Log.d("KRUX", "Page View OK: " + pageAttrs.getString("path"));
-            callbackContext.success("Tracking page view OK " + pageAttrs.getString("path"));
+            Log.d("KRUX", "Tracking page: " + pageAttrs.getString("path"));
+            callbackContext.success("Tracking page: " + pageAttrs.getString("path"));
             return true;
         }
 
@@ -76,13 +76,13 @@ public class DMPPlugin extends CordovaPlugin {
             Bundle eventAttrs = getEventAttributes(args);
             KruxEventAggregator.fireEvent("Main", eventAttrs);
 
-            Log.d("KRUX", "Fire Event OK: " + eventAttrs.getString("action"));
-            callbackContext.success("Tracking fire event OK " + eventAttrs.getString("action"));
+            Log.d("KRUX", "Firing event: " + eventAttrs.getString("action"));
+            callbackContext.success("Firing event: " + eventAttrs.getString("action"));
             return true;
         }
 
         Log.d("Cordova Locale Plugin", "Action not implemeted: " + action + ", Args: " + args);
-        callbackContext.error("Test error");
+        callbackContext.error("Krux invocation error");
         return false;
     }
 

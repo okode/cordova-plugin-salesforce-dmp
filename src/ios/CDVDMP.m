@@ -19,7 +19,7 @@ static KruxTracker *kt;
     
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
-                               messageAsString:@"Init Krux OK"];
+                               messageAsString:@"Initializing Krux"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -43,7 +43,7 @@ static KruxTracker *kt;
     
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
-                               messageAsString:@"Send Krux Requests OK"];
+                               messageAsString:@"Sending Krux Requests"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -68,7 +68,7 @@ static KruxTracker *kt;
     
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
-                               messageAsString:@"Track Page Krux OK"];
+                               messageAsString:@"Tracking page"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -81,7 +81,7 @@ static KruxTracker *kt;
     
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
-                               messageAsString:@"Fire Event Krux OK"];
+                               messageAsString:@"Firing event"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
