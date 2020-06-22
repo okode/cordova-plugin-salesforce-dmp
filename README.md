@@ -11,7 +11,7 @@ Add to your package.json:
 ```
 devDependencies: {
   ...
-  "cordova-plugin-dmp": "github:okode/cordova-plugin-dmp",
+  "cordova-plugin-dmp": "0.0.1",
   ...
 }
 ```
