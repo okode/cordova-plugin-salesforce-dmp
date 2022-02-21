@@ -37,7 +37,7 @@ export interface DMPPlugin {
    * @errors
    *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
    */
-  trackPage(params: { email: string, logged: boolean, path: string, type: string }): Promise<string>;
+  trackPage(params: { email: string, logged: boolean, cod_ric: string, path: string, type: string }): Promise<string>;
 
   /**
    * @description      Track event.

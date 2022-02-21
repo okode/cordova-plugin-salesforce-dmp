@@ -48,7 +48,7 @@ DMP.getSegments()
 ```
 
 ```
-DMP.trackPage(params: { email: string, logged: boolean, path: string, type: string })
+DMP.trackPage(params: { email: string, logged: boolean, cod_ric: string, path: string, type: string })
 ```
 
 ```

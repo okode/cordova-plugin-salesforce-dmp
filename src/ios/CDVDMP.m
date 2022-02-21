@@ -105,6 +105,7 @@ static KruxTracker *kt;
     NSMutableDictionary *userAttributes = [[NSMutableDictionary alloc] init];
     [userAttributes setValue:[attributes objectForKey:@"email"] forKey:@"email"];
     [userAttributes setValue:[attributes objectForKey:@"logged"] forKey:@"logged"];
+    [userAttributes setValue:[attributes objectForKey:@"cod_ric"] forKey:@"cod_ric"];
     
     return userAttributes;
 }
