@@ -24,9 +24,6 @@
       </feature>
     </config-file>
     <edit-config file="AndroidManifest.xml" target="/manifest" mode="merge">
-      <uses-permission android:name="android.permission.INTERNET"/>
-      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
       <service android:name="com.krux.androidsdk.aggregator.EventPublisherService" android:enabled="true" />
       <service android:name="com.krux.androidsdk.aggregator.ConsentService" android:enabled="true" />
     </edit-config>

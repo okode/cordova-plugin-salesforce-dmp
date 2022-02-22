@@ -26,6 +26,15 @@ devDependencies: {
 }
 ```
 
+## Project configuration
+
+This plugin needs access to network state and location, you need to add the following configuration to your Android Manifest:
+
+
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
 ## Import
 
 ```
