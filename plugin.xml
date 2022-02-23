@@ -23,10 +23,13 @@
         <param name="android-package" value="com.okode.dmp.DMPPlugin"/>
       </feature>
     </config-file>
-    <edit-config file="AndroidManifest.xml" target="/manifest" mode="merge">
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <uses-permission android:name="android.permission.INTERNET"/>
+      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
       <service android:name="com.krux.androidsdk.aggregator.EventPublisherService" android:enabled="true" />
       <service android:name="com.krux.androidsdk.aggregator.ConsentService" android:enabled="true" />
-    </edit-config>
+    </config-file>
     <framework src="src/android/build.gradle" custom="true" type="gradleReference"/>
     <source-file src="src/android/DMPPlugin.java" target-dir="src/com/okode/dmp" />
     <resource-file src="src/android/krux-4.4.0.aar" target="libs/krux-4.4.0.aar" />
