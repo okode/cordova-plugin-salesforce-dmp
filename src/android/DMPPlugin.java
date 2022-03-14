@@ -21,21 +21,21 @@ public class DMPPlugin extends CordovaPlugin {
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
-        if ("initialize".equals(action)) {
+           if ("initialize".equals(action)) {
+            JSONObject argsObject = args.getJSONObject(0);
+            String apiKey = (String) argsObject.get("apiKey");
+            Log.d("KRUX", "Initializing Krux with key: " + apiKey);
             KruxSegments kruxSegmentsCallback = new KruxSegments() {
                 @Override
                 public void getSegments(final String segments) {
                     Log.d("KRUX", "Krux formatted segments: " + segments);
                     mSegments = segments;
+                    callbackContext.success("Initialized Krux with key: " + apiKey);
                 }
             };
             KruxConsentCallback consentCallback = new KruxConsentCallbackImpl();
-            JSONObject argsObject = args.getJSONObject(0);
-            String apiKey = (String) argsObject.get("apiKey");
             KruxEventAggregator.initialize(this.cordova.getContext(), apiKey, kruxSegmentsCallback, true, consentCallback);
 
-            Log.d("KRUX", "Initializing Krux with key: " + apiKey);
-            callbackContext.success("Initializing Krux with key: " + apiKey);
             return true;
         }
 
