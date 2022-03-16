@@ -99,7 +99,7 @@ public class DMPPlugin extends CordovaPlugin {
         Bundle userAttributes = new Bundle();
         userAttributes.putBoolean("logged", (Boolean) argsObject.get("logged"));
         userAttributes.putString("email", (String) argsObject.get("email"));
-        userAttributes.putString("cod_ric", (String) argsObject.get("cod_ric"));
+        userAttributes.putString("userInfo.cod_ric", (String) argsObject.get("cod_ric"));
         return userAttributes;
     }
 
