@@ -1,4 +1,6 @@
 #import <Foundation/Foundation.h>
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
+#import <AdSupport/AdSupport.h>
 #import "CDVDMP.h"
 #import "KruxConsentCallbackImpl.h"
 
@@ -71,6 +73,17 @@ static KruxTracker *kt;
                                messageAsString:@"Tracking page"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)trackAuthorization 
+{
+    if (@available(iOS 14, *)) {
+        [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+          return status;
+        }]; 
+    } else {
+        
+    }
 }
 
 - (void)fireEvent:(CDVInvokedUrlCommand *)command

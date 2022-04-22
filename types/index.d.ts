@@ -40,6 +40,16 @@ export interface DMPPlugin {
   trackPage(params: { email: string, logged: boolean, cod_ric: string, path: string, type: string }): Promise<string>;
 
   /**
+   * @description      Track Authorization on IOS.
+   *                   Tracking Transparency authorization request for accessing the IDFA.
+   * @returns
+   *                   text: if succesfully retrieved.
+   * @errors
+   *                   DMP__REQUEST__ACCOUNTS_NOT_FOUND: if there is no text saved
+   */
+   trackAuthorization(): Promise<string>;
+
+  /**
    * @description      Track event.
    *                   On Android, if several are found, it will open a modal for user selection.
    * @returns

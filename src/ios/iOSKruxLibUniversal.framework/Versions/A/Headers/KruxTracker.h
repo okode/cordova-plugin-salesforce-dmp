@@ -2,7 +2,7 @@
 //  KruxTracker.h
 //  iOSKruxLib
 //
-//  Version 4.4.0
+//  Version 4.5.1
 //  Copyright © 2017 Krux Digital. All rights reserved.
 //
 
@@ -61,5 +61,7 @@
 - (void)startScheduler;
 
 - (void)stopScheduler;
+
+- (NSString*)getUDID;
 
 @end

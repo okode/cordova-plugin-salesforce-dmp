@@ -29,6 +29,10 @@ DMP.prototype.trackPage = function (params) {
   return exec('trackPage', params);
 };
 
+DMP.prototype.trackAuthorization = function () {
+  return exec('trackAuthorization');
+};
+
 DMP.prototype.fireEvent = function (params) {
   return exec('fireEvent', params);
 };
