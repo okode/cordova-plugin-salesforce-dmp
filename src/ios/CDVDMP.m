@@ -77,6 +77,9 @@ static KruxTracker *kt;
 
 - (void)trackAuthorization 
 {
+    // TODO: Not implemented
+
+    /*
     if (@available(iOS 14, *)) {
         [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
           return status;
@@ -84,6 +87,7 @@ static KruxTracker *kt;
     } else {
         
     }
+    */
 }
 
 - (void)fireEvent:(CDVInvokedUrlCommand *)command
