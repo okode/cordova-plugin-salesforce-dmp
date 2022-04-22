@@ -51,7 +51,7 @@
     <framework src="SystemConfiguration.framework"/>
     <framework src="AdSupport.framework"/>
     <framework src="CoreLocation.framework"/>
-    <framework src="src/ios/iOSKruxLibUniversal.framework" embed="true" custom="true"/>
+    <framework src="src/ios/iOSKruxLibUniversal.framework" custom="true"/>
   </platform>
 
 </plugin>
