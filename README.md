@@ -52,10 +52,6 @@ DMP.trackPage(params: { email: string, logged: boolean, cod_ric: string, path: s
 ```
 
 ```
-DMP.trackAuthorization()
-```
-
-```
 DMP.fireEvent(params: { action: string, category: string, label: string })
 ```
 

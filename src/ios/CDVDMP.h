@@ -9,7 +9,6 @@
 - (void) sendRequests:(CDVInvokedUrlCommand*)command;
 - (void) getSegments:(CDVInvokedUrlCommand*)command;
 - (void) trackPage:(CDVInvokedUrlCommand*)command;
-- (void) trackAuthorization:(CDVInvokedUrlCommand*)command;
 - (void) fireEvent:(CDVInvokedUrlCommand*)command;
 
 - (void) addPolicyRegimeParameter: (NSMutableDictionary *) attributes : (NSString *) pr;

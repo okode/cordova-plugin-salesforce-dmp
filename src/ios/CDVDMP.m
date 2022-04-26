@@ -6,6 +6,8 @@
 
 @implementation CDVDMP
 
+BOOL allowedIDFA;
+
 static KruxTracker *kt;
 
 + (KruxTracker *)getKruxTracker {
@@ -14,6 +16,9 @@ static KruxTracker *kt;
 
 - (void)initialize:(CDVInvokedUrlCommand*)command
 {
+    [self requestIDFA];
+
+    if (allowedIDFA) {
     NSDictionary* options = [command argumentAtIndex:0];
     NSString* apikey = [options objectForKey:@"apiKey"];
     KruxConsentCallbackImpl *consentCallback = [[KruxConsentCallbackImpl alloc] init];
@@ -24,6 +29,7 @@ static KruxTracker *kt;
                                messageAsString:@"Initializing Krux"];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 - (void)sendRequests:(CDVInvokedUrlCommand*)command
@@ -75,21 +81,6 @@ static KruxTracker *kt;
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void)trackAuthorization 
-{
-    // TODO: Not implemented
-
-    /*
-    if (@available(iOS 14, *)) {
-        [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
-          return status;
-        }]; 
-    } else {
-        
-    }
-    */
-}
-
 - (void)fireEvent:(CDVInvokedUrlCommand *)command
 {
     NSDictionary *eventAttr = [command argumentAtIndex:0];
@@ -125,6 +116,33 @@ static KruxTracker *kt;
     [userAttributes setValue:[attributes objectForKey:@"cod_ric"] forKey:@"userInfo.cod_ric"];
     
     return userAttributes;
+}
+
+- (void)requestIDFA
+{
+    if (@available(iOS 14.0, *)) {
+        ATTrackingManagerAuthorizationStatus states = [ATTrackingManager trackingAuthorizationStatus];
+        if (ATTrackingManagerAuthorizationStatusAuthorized == states) {
+            NSLog(@"Request IDFA allowed");
+            allowedIDFA = true;
+        } else if (states == ATTrackingManagerAuthorizationStatusNotDetermined) {
+            [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+                if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
+                    NSLog(@"Request IDFA allowed");
+                    allowedIDFA = true;
+                } else {
+                    NSLog(@"Request IDFA denied");
+                    allowedIDFA = false;
+                }
+            }];
+        } else {
+            NSLog(@"Request IDFA denied");
+            allowedIDFA = false;
+        }
+    } else {
+        NSLog(@"Request IDFA allowed");
+        allowedIDFA = true;
+    }
 }
 
 @end
