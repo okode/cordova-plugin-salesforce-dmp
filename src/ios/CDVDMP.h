@@ -10,6 +10,7 @@
 - (void) getSegments:(CDVInvokedUrlCommand*)command;
 - (void) trackPage:(CDVInvokedUrlCommand*)command;
 - (void) fireEvent:(CDVInvokedUrlCommand*)command;
+- (void) initPlugin:(CDVInvokedUrlCommand*)command;
 
 - (void) addPolicyRegimeParameter: (NSMutableDictionary *) attributes : (NSString *) pr;
 - (NSMutableDictionary *) getUserParameters: (NSDictionary *) attributes;
