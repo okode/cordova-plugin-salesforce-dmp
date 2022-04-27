@@ -1,4 +1,6 @@
 #import <Foundation/Foundation.h>
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
+#import <AdSupport/AdSupport.h>
 #import "CDVDMP.h"
 #import "KruxConsentCallbackImpl.h"
 
@@ -12,16 +14,28 @@ static KruxTracker *kt;
 
 - (void)initialize:(CDVInvokedUrlCommand*)command
 {
-    NSDictionary* options = [command argumentAtIndex:0];
-    NSString* apikey = [options objectForKey:@"apiKey"];
-    KruxConsentCallbackImpl *consentCallback = [[KruxConsentCallbackImpl alloc] init];
-    kt = [KruxTracker sharedEventTrackerWithConfigId:apikey debugFlag:true dryRunFlag:false consentCallback:consentCallback];
-    
-    CDVPluginResult* result = [CDVPluginResult
-                               resultWithStatus:CDVCommandStatus_OK
-                               messageAsString:@"Initializing Krux"];
-    
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    if (@available(iOS 14.0, *)) {
+        ATTrackingManagerAuthorizationStatus states = [ATTrackingManager trackingAuthorizationStatus];
+        if (ATTrackingManagerAuthorizationStatusAuthorized == states) {
+            NSLog(@"Request IDFA allowed");
+            [self initPlugin:command];
+        } else if (states == ATTrackingManagerAuthorizationStatusNotDetermined) {
+            [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+                if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
+                    NSLog(@"Request IDFA allowed");
+                    [self initPlugin:command];
+                } else {
+                    NSLog(@"Request IDFA denied");
+                }
+            }];
+        } else {
+            NSLog(@"Request IDFA denied");
+        }
+    } else {
+        NSLog(@"Request IDFA allowed");
+        [self initPlugin:command];
+    }
+
 }
 
 - (void)sendRequests:(CDVInvokedUrlCommand*)command
@@ -108,6 +122,20 @@ static KruxTracker *kt;
     [userAttributes setValue:[attributes objectForKey:@"cod_ric"] forKey:@"userInfo.cod_ric"];
     
     return userAttributes;
+}
+
+- (void)initPlugin:(CDVInvokedUrlCommand*)command
+{
+    NSDictionary* options = [command argumentAtIndex:0];
+    NSString* apikey = [options objectForKey:@"apiKey"];
+    KruxConsentCallbackImpl *consentCallback = [[KruxConsentCallbackImpl alloc] init];
+    kt = [KruxTracker sharedEventTrackerWithConfigId:apikey debugFlag:true dryRunFlag:false consentCallback:consentCallback];
+    
+    CDVPluginResult* result = [CDVPluginResult
+                               resultWithStatus:CDVCommandStatus_OK
+                               messageAsString:@"Initializing Krux"];
+    
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 @end
