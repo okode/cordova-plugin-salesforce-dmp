@@ -9,7 +9,7 @@ dependencies {
   implementation 'com.android.support:appcompat-v7:27.+'
   implementation 'com.google.android.gms:play-services-auth:16.+'
   implementation 'com.google.android.gms:play-services-ads:16.+'
-  compile(name:'krux-5.0.1', ext:'aar')
+  implementation(name:'krux-5.0.1', ext:'aar')
 }
 
 android {
